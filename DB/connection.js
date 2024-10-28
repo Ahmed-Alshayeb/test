@@ -1,18 +1,18 @@
-import { Sequelize } from "sequelize";
+import mysql from "mysql2";
 
-export const sequelize = new Sequelize(
-  "mysql://urthuiwezbvrseob:idqqcGwzVqLVxVlwpLSk@bs1xtjqlwenxhebtxbtx-mysql.services.clever-cloud.com:3306/bs1xtjqlwenxhebtxbtx"
-);
+const pool = mysql.createPool({
+  host: "bs1xtjqlwenxhebtxbtx-mysql.services.clever-cloud.com",
+  user: "urthuiwezbvrseob",
+  database: "bs1xtjqlwenxhebtxbtx",
+  password: "idqqcGwzVqLVxVlwpLSk",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  port: 3306,
+});
+pool.getConnection((err, connection) => {
+  if (err) console.log(err);
+  console.log("connected successfully");
+});
 
-const connectionDB = async () => {
-  await sequelize
-    .sync()
-    .then(() => {
-      console.log("Database connected");
-    })
-    .catch((error) => {
-      console.error("Unable to connect to the database:", error);
-    });
-};
-
-export default connectionDB;
+export default pool;
